@@ -19,6 +19,7 @@ function dataPerProduct(kanap) {
     makeTitle(name)
     makePrice(price)
     makeDescription(description)
+    makeColors(colors)
 }
 
 function makeImage(imageUrl, altTxt) {
@@ -41,6 +42,18 @@ function makePrice(price) {
 function makeDescription(description) {
     const p = document.querySelector("#description")
     if (p != null) p.textContent = description
+}
+
+function makeColors(colors) {
+    const select = document.querySelector("#colors")
+    if (select != null) {
+        colors.forEach((color) => {
+            const option = document.createElement("option")
+            option.value = color
+            option.textContent = color
+            select.appendChild(option)
+        })
+    }
 }
 
 
