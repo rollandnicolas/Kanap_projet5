@@ -7,25 +7,45 @@ fetch("http://localhost:3000/api/products")
     })
 
   function addProducts (data) {
+
+    /* for (let i = 0 ; i < data.length; i++) {
+      let kanap = data[i];
+      const id = kanap._id
+      const imageUrl = kanap.imageUrl
+      const altTxt = kanap.altTxt
+      const name = kanap.name
+      const description = kanap.description
+      const image = makeImage(imageUrl, altTxt)
+      const anchor = makeAnchor(id)
+      const article = makeArticle("article")
+      const h3 = makeH3(name)
+      const p = makeParagraph(description)
+      article.appendChild(image)
+      article.appendChild(h3)
+      article.appendChild(p)
+      appendArticleToAnchor(anchor, article)
+    } */
+    
+
     data.forEach((kanap) => {
     
-    const id = kanap._id
-    const imageUrl = kanap.imageUrl
-    const altTxt = kanap.altTxt
-    const name = kanap.name
-    const description = kanap.descrition
-    const image = makeImage(imageUrl, altTxt)
-    const anchor = makeAnchor(id)
-    const article = makeArticle("article")
-    const h3 = makeH3(name)
-    const p = makeParagraph(description)
+      const id = kanap._id
+      const imageUrl = kanap.imageUrl
+      const altTxt = kanap.altTxt
+      const name = kanap.name
+      const description = kanap.description
+      const image = makeImage(imageUrl, altTxt)
+      const anchor = makeAnchor(id)
+      const article = makeArticle("article")
+      const h3 = makeH3(name)
+      const p = makeParagraph(description)
 
-    article.appendChild(image)
-    article.appendChild(h3)
-    article.appendChild(p)
-    appendArticleToAnchor(anchor, article)
-  })
-}
+      article.appendChild(image)
+      article.appendChild(h3)
+      article.appendChild(p)
+      appendArticleToAnchor(anchor, article)
+    })
+  }
 
   function makeAnchor (id) {
     const anchor = document.createElement("a")
@@ -54,7 +74,7 @@ function makeArticle() {
 }
 function makeH3(name) {
   const h3 = document.createElement("h3")
-  h3.textcontent = name
+  h3.textContent = name
   h3.classList.add("productName")
   return h3
 }

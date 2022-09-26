@@ -41,6 +41,7 @@ function makePrice(price) {
 
 function makeDescription(description) {
     const p = document.querySelector("#description")
+    // const p = document.getElementById("#description") marcherait aussi... 
     if (p != null) p.textContent = description
 }
 
@@ -56,4 +57,25 @@ function makeColors(colors) {
     }
 }
 
+function initEventListeners() {
+    
+    document.getElementById('addToCart').addEventListener('click', function() {
+        basketItem = {
+            'id' : id,
+            'color' : 'Yellow/Black', // recupere l'option selectionnee
+            'qty': document.getElementById('quantity').value // recuperer l'option selectionnee          
+        }
+        console.log(basketItem);
+        //basketItems = localStorage.getItems('basket');
+                // attention ca ne marche pas si il y en avait pas deja ... 
+        // basketItems.push(basketItem)
 
+        // trucs a faire ici
+            // si je n'ai pas mis de quantite ? 
+            // si je n'ai pas pris de couleur ? 
+            // si j'avais deja mis un article dans le panier de cette reference (id) et de cette couleur ? que faire ? incrementer la quantite ? 
+
+    })
+}
+
+window.onload = initEventListeners
