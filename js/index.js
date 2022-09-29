@@ -40,6 +40,7 @@ fetch("http://localhost:3000/api/products")
       const h3 = makeH3(name)
       const p = makeParagraph(description)
 
+
       article.appendChild(image)
       article.appendChild(h3)
       article.appendChild(p)

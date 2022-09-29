@@ -57,13 +57,13 @@ function makeColors(colors) {
     }
 }
 
-function initEventListeners() {
+/*function initEventListeners() {
     
     document.getElementById('addToCart').addEventListener('click', function() {
         basketItem = {
             'id' : id,
-            'color' : 'Yellow/Black', // recupere l'option selectionnee
-            'qty': document.getElementById('quantity').value // recuperer l'option selectionnee          
+          //  'colors' : document.getElementById('color').value // recupere l'option selectionnee
+            //'quantity' : document.getElementById('quantity').value // recuperer l'option selectionnee          
         }
         console.log(basketItem);
         //basketItems = localStorage.getItems('basket');
@@ -79,3 +79,15 @@ function initEventListeners() {
 }
 
 window.onload = initEventListeners
+*/
+
+const button = document.querySelector("#addToCart")
+if (button != null) {
+    button.addEventListener("click", (e) => {
+        const color = document.querySelector("#colors").value
+        const quantity = document.querySelector("#quantity").value
+        if (color == null || color === "" || quantity == null || quantity == 0 ) {
+            alert("Veuillez sélectionner une couleur et une quantité")
+        }
+})
+}
