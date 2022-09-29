@@ -1,6 +1,9 @@
 const searchLocation = window.location.search
 const urlParameters = new URLSearchParams(searchLocation)
 const id = urlParameters.get("id")
+if (id != null ) {
+    let localStoragePrice = 0
+}
 
 fetch(`http://localhost:3000/api/products/${id}`)
 .then(response => response.json())
@@ -15,6 +18,7 @@ function dataPerProduct(kanap) {
     const proice = kanap.price
     const _id = kanap._id*/
     const { altTxt, colors, description, imageUrl, name, price, _id } = kanap
+    localStoragePrice = price
     makeImage(imageUrl, altTxt)
     makeTitle(name)
     makePrice(price)
@@ -81,13 +85,21 @@ function makeColors(colors) {
 window.onload = initEventListeners
 */
 
-const button = document.querySelector("#addToCart")
+const button = document.getElementById("addToCart")
 if (button != null) {
     button.addEventListener("click", (e) => {
-        const color = document.querySelector("#colors").value
-        const quantity = document.querySelector("#quantity").value
+        const color = document.getElementById("colors").value
+        const quantity = document.getElementById("quantity").value
         if (color == null || color === "" || quantity == null || quantity == 0 ) {
             alert("Veuillez sélectionner une couleur et une quantité")
         }
+        const data = {
+            id : id,
+            color : color,
+            quantity : Number(quantity),
+            price : localStoragePrice,
+
+        }
+        localStorage.setItem(id, JSON.stringify(data) )
 })
 }
