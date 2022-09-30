@@ -89,26 +89,47 @@ window.onload = initEventListeners
 */
 
 
-const button = document.getElementById("addToCart")
+
+const button = document.getElementById('addToCart')
 if (button != null) {
     button.addEventListener("click", (e) => {
+        var basketItems = JSON.parse(localStorage.getItem('kanapBasketItems'));
+        if (!basketItems) basketItems = [];
         const color = document.getElementById("colors").value
         const quantity = document.getElementById("quantity").value
         if (color == null || color === "" || quantity == null || quantity == 0 ) {
             alert("Veuillez sélectionner une couleur et une quantité")
-        }
-        else {
-            window.location.href = "cart.html"
-        }
-       
-        const data = {
-            id : id,
-            color : color,
-            quantity : Number(quantity),
-           // price : localStoragePrice,
+            return;
+        }  
 
+        // est-ce que ce canap avec cette couleur, il est deja dans basket items ? 
+        // si oui, on increment
+        // sinon, on cree et on push 
+        let found = false;
+        for (let i = 0 ; i < basketItems.length; i++) {
+            if (basketItems[i].id == id && basketItems[i].color == color) {
+                found = true
+                basketItems[i].qty += Number(quantity)            
+                break;
+            }
         }
-        localStorage.setItem(id, JSON.stringify(data) )
+        if (!found) {
+            const data = {
+                id : id,
+                color : color,
+                quantity : Number(quantity)            
+            }
+            basketItems.push(data);
+        }
+
+        // document.getElementById('addToCart').setAttribute = ('disabled', 'disabled');
+        // document.getElementById('addToCart').setAttribute = ('disabled', '');
         
-})
+        // JQuery
+        // $('#addToCard').disabled();
+
+        // fin de la condition        
+        localStorage.setItem('kanapBasketItems', JSON.stringify(basketItems)) // JSON.parse
+        window.location.href = "cart.html"                
+    })
 }
