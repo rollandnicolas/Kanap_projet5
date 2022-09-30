@@ -1,9 +1,11 @@
 const searchLocation = window.location.search
 const urlParameters = new URLSearchParams(searchLocation)
 const id = urlParameters.get("id")
+/*
 if (id != null ) {
     let localStoragePrice = 0
 }
+*/
 
 fetch(`http://localhost:3000/api/products/${id}`)
 .then(response => response.json())
@@ -18,7 +20,7 @@ function dataPerProduct(kanap) {
     const proice = kanap.price
     const _id = kanap._id*/
     const { altTxt, colors, description, imageUrl, name, price, _id } = kanap
-    localStoragePrice = price
+   // localStoragePrice = price
     makeImage(imageUrl, altTxt)
     makeTitle(name)
     makePrice(price)
@@ -61,18 +63,19 @@ function makeColors(colors) {
     }
 }
 
-/*function initEventListeners() {
+/*
+function initEventListeners() {
     
     document.getElementById('addToCart').addEventListener('click', function() {
         basketItem = {
             'id' : id,
-          //  'colors' : document.getElementById('color').value // recupere l'option selectionnee
-            //'quantity' : document.getElementById('quantity').value // recuperer l'option selectionnee          
+            'colors' : document.getElementById('color').value // recupere l'option selectionnee
+            'quantity' : document.getElementById('quantity').value // recuperer l'option selectionnee          
         }
         console.log(basketItem);
-        //basketItems = localStorage.getItems('basket');
+        basketItems = localStorage.getItems('basket');
                 // attention ca ne marche pas si il y en avait pas deja ... 
-        // basketItems.push(basketItem)
+        basketItems.push(basketItem)
 
         // trucs a faire ici
             // si je n'ai pas mis de quantite ? 
@@ -85,6 +88,7 @@ function makeColors(colors) {
 window.onload = initEventListeners
 */
 
+
 const button = document.getElementById("addToCart")
 if (button != null) {
     button.addEventListener("click", (e) => {
@@ -93,13 +97,18 @@ if (button != null) {
         if (color == null || color === "" || quantity == null || quantity == 0 ) {
             alert("Veuillez sélectionner une couleur et une quantité")
         }
+        else {
+            window.location.href = "cart.html"
+        }
+       
         const data = {
             id : id,
             color : color,
             quantity : Number(quantity),
-            price : localStoragePrice,
+           // price : localStoragePrice,
 
         }
         localStorage.setItem(id, JSON.stringify(data) )
+        
 })
 }
