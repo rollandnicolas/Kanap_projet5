@@ -1,56 +1,85 @@
-/*
+var basketItems = JSON.parse(localStorage.getItem('kanapBasketItems'));
+console.log(basketItems);
 
-const searchLocation = window.location.search
-const urlParameters = new URLSearchParams(searchLocation)
-const id = urlParameters.get("id")
+const cart = []
 
-
-fetch(`http://localhost:3000/api/products/${id}`)
-.then(response => response.json())
-.then((res) => dataPerProduct(res))
-
-function dataPerProduct(kanap) {
-    const { altTxt, colors, description, imageUrl, name, price, _id } = kanap
+function kanapBasketItems(kanap) {
+    const { altTxt, colors, description, imageUrl, name, price, id } = kanap
     makeImage(imageUrl, altTxt)
     makeTitle(name)
     makePrice(price)
     makeDescription(description)
-    makeColors(colors)
 }
-function makeImage(imageUrl, altTxt) {
+console.log(kanapBasketItems)
+
+
+takeFromLocalstorage()
+cart.forEach((item) => displayItem (item))
+
+
+fetch(`http://localhost:3000/api/products/${item}`)
+.then(response => response.json())
+.then((res) => kanapBasketItems(res))
+
+
+
+
+function takeFromLocalstorage()
+   const numberOfItems = localStorage.length
+    for (let j = 0; j < numberOfItems; j++) {
+        const item = localStorage.getItem(localStorage.key(j))
+    console.log("objet à la position", j, "est", item)
+        const itemObject = JSON.parse(item)
+        cart.push(itemObject)
+}
+
+
+function displayItem(item) {
+    const article = makeArticle(item)
+    displayArticle(article)
+    console.log(article)
+    const image = makeImage(item)
+}
+
+function displayArticle(article) {
+    document.getElementById("cart__item").appendChild(article)
+}
+
+function makeArticle(item) {
+    const article = document.createElement("article")
+    article.classList.add("cart__item")
+    //article.dataset.id = item.id
+    //article.dataset.color = item.color
+    return article
+}
+
+function makeImage(item) {
     const image = document.createElement("img")
-    image.src = imageUrl
-    image.alt = altTxt
-    const recip = document.querySelector(".item__img")
-    recip.appendChild(image)
+    image.src = item.imageUrl
+    image.alt = item.altTxt
+    return image
 }
+
+const searchLocation = window.location.search
+const item = localStorage.getItem("item")
+
+
+
+
+  
+/*
 function makeTitle(name) {
     const h1 = document.querySelector("#title")
     if (h1 != null) h1.textContent = name
 }
 
-function makePrice(price) {
+/*function makePrice(price) {
     const span = document.querySelector("#price")
     if (span != null) span.textContent = price
 }
 
 function makeDescription(description) {
     const p = document.querySelector("#description")
-    // const p = document.getElementById("#description") marcherait aussi... 
     if (p != null) p.textContent = description
 }
-
-function makeColors(colors) {
-    const select = document.querySelector("#colors")
-    if (select != null) {
-        colors.forEach((color) => {
-            const option = document.createElement("option")
-            option.value = color
-            option.textContent = color
-            select.appendChild(option)
-        })
-    }
-}
-
 */
-  

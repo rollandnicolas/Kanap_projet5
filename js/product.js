@@ -1,11 +1,12 @@
 const searchLocation = window.location.search
 const urlParameters = new URLSearchParams(searchLocation)
 const id = urlParameters.get("id")
-/*
+
 if (id != null ) {
-    let localStoragePrice = 0
+    //let itemPrice = 0
+   // let imgUrl, altText
 }
-*/
+
 
 fetch(`http://localhost:3000/api/products/${id}`)
 .then(response => response.json())
@@ -17,10 +18,14 @@ function dataPerProduct(kanap) {
     const description = kanap.description
     const imageUrl = kanap.imageUrl
     const name = kanap.name
-    const proice = kanap.price
+    const price = kanap.price
     const _id = kanap._id*/
-    const { altTxt, colors, description, imageUrl, name, price, _id } = kanap
-   // localStoragePrice = price
+    const { altTxt, colors, description, imageUrl, name, price } = kanap
+
+    //itemPrice = price
+    //imgUrl = imageUrl
+    //altText = altTxt
+
     makeImage(imageUrl, altTxt)
     makeTitle(name)
     makePrice(price)
@@ -47,7 +52,6 @@ function makePrice(price) {
 
 function makeDescription(description) {
     const p = document.querySelector("#description")
-    // const p = document.getElementById("#description") marcherait aussi... 
     if (p != null) p.textContent = description
 }
 
@@ -97,6 +101,9 @@ if (button != null) {
         if (!basketItems) basketItems = [];
         const color = document.getElementById("colors").value
         const quantity = document.getElementById("quantity").value
+
+        /*const price = document.getElementById("price").value*/
+
         if (color == null || color === "" || quantity == null || quantity == 0 ) {
             alert("Veuillez sélectionner une couleur et une quantité")
             return;
@@ -117,7 +124,10 @@ if (button != null) {
             const data = {
                 id : id,
                 color : color,
-                quantity : Number(quantity)            
+                quantity : Number(quantity) 
+               /* price : price,
+                altText : altTxt,
+                imageUrl : imgUrl,      */     
             }
             basketItems.push(data);
         }
@@ -129,7 +139,7 @@ if (button != null) {
         // $('#addToCard').disabled();
 
         // fin de la condition        
-        localStorage.setItem('kanapBasketItems', JSON.stringify(basketItems)) // JSON.parse
+        localStorage.setItem(id, JSON.stringify(basketItems)) // JSON.parse
         window.location.href = "cart.html"                
     })
 }
