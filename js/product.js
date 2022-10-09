@@ -26,14 +26,14 @@ function dataPerProduct(kanap) {
     //imgUrl = imageUrl
     //altText = altTxt
 
-    makeImage(imageUrl, altTxt)
+    makeDivImage(imageUrl, altTxt)
     makeTitle(name)
     makePrice(price)
     makeDescription(description)
     makeColors(colors)
 }
 
-function makeImage(imageUrl, altTxt) {
+function makeDivImage(imageUrl, altTxt) {
     const image = document.createElement("img")
     image.src = imageUrl
     image.alt = altTxt
@@ -139,7 +139,7 @@ if (button != null) {
         // $('#addToCard').disabled();
 
         // fin de la condition        
-        localStorage.setItem(id, JSON.stringify(basketItems)) // JSON.parse
+        localStorage.setItem("kanapBasketItems", JSON.stringify(basketItems)) // JSON.parse
         window.location.href = "cart.html"                
     })
 }
