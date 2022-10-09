@@ -37,17 +37,21 @@ function kanapBasketItems(kanap, item) {
     makeName(name, divContentDescription)
     makeColor(item, divContentDescription)
     makePrice(price, divContentDescription)
+
+    const divContentSettings = makeDivContentSettings(divContent)
+    const divContentSettingsQuantity = makeDivContentSettingsQuantity(item, divContentSettings)
+
+    makeQuantity(item, divContentSettingsQuantity)
+    
+    makeInput(divContentSettingsQuantity)
+
+    const divContentSettingsDelete = makeDivContentSettingsDelete(divContentSettings)
 }
 console.log(kanapBasketItems)
 
 
 //takeFromLocalstorage()
 //cart.forEach((item) => displayItem (item))
-
-
-
-
-
 
 
 function takeFromLocalstorage() {
@@ -129,6 +133,49 @@ function makePrice(price, divContent) {
     p2.textContent = price + " €"
     divContent.appendChild(p2)
 }
+
+function makeDivContentSettings(divContent) {
+    const divContentSettings = document.createElement("div")
+    divContentSettings.classList.add("cart__item__content__settings")
+    divContent.appendChild(divContentSettings)
+    return divContentSettings
+}
+
+function makeDivContentSettingsQuantity(item, divContentSettings) {
+    const divContentSettingsQuantity = document.createElement("div")
+    divContentSettingsQuantity.classList.add("cart__item__content__settings__quantity")
+    divContentSettings.appendChild(divContentSettingsQuantity)
+    return divContentSettingsQuantity
+}
+
+
+function makeQuantity(item, divContentSettingsQuantity) {
+    const quantite = document.createElement("p")
+    quantite.textContent = "Qté : " + item.quantity
+    divContentSettingsQuantity.appendChild(quantite)
+}
+
+function makeInput(divContentSettingsQuantity) {
+    const input = document.createElement("input")
+    input.classList.add("itemQuantity")
+    /*
+    Modif de l input
+    */
+
+    divContentSettingsQuantity.appendChild(input)
+}
+
+function makeDivContentSettingsDelete(divContentSettings) {
+    const divContentSettingsDelete = document.createElement("div")
+    divContentSettingsDelete.classList.add("cart__item__content__settings__delete")
+    divContentSettings.appendChild(divContentSettingsDelete)
+
+    const deleteItem = document.createElement("p")
+    deleteItem.classList.add("deleteItem")
+    deleteItem.textContent = "Supprimer"
+    divContentSettingsDelete.appendChild(deleteItem)
+}
+
 
 const searchLocation = window.location.search
 const item = localStorage.getItem("item")
