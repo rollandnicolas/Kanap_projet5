@@ -2,7 +2,6 @@ var basketItems = JSON.parse(localStorage.getItem('kanapBasketItems'));
 for (let i = 0; i < basketItems.length; i++) {
     displayItem(basketItems[i])
 }
-console.log(basketItems);
 const cart = []
 
 /*  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
@@ -43,11 +42,10 @@ function kanapBasketItems(kanap, item) {
 
     makeQuantity(item, divContentSettingsQuantity)
     
-    makeInput(divContentSettingsQuantity)
+    makeInput(item, divContentSettingsQuantity)
 
     const divContentSettingsDelete = makeDivContentSettingsDelete(divContentSettings)
 }
-console.log(kanapBasketItems)
 
 
 //takeFromLocalstorage()
@@ -58,21 +56,18 @@ function takeFromLocalstorage() {
     const numberOfItems = localStorage.length
     for (let i = 0; i < numberOfItems; i++) {
         const item = localStorage.getItem(localStorage.key(i))
-        console.log("objet à la position", i, "est", item)
         const itemObject = JSON.parse(item)
         cart.push(itemObject)
     }
 }
 
 function displayItem(item) {
-    console.log(item)
     fetch(`http://localhost:3000/api/products/${item.id}`)
         .then(response => response.json())
         .then((res) => {
             // a ce stade, on : 
             // - item : un item du local storage
             // - res : le product retourne par l'API 
-            console.log(res)
             kanapBasketItems(res, item)
         })
 
@@ -117,7 +112,6 @@ function makeDivContentDescription(divContent) {
 function makeName(name, divContent) {
     const h2 = document.createElement("h2")
     h2.textContent = name
-    console.log(h2)
     divContent.appendChild(h2)
 }
 
@@ -155,12 +149,14 @@ function makeQuantity(item, divContentSettingsQuantity) {
     divContentSettingsQuantity.appendChild(quantite)
 }
 
-function makeInput(divContentSettingsQuantity) {
+function makeInput(item, divContentSettingsQuantity) {
     const input = document.createElement("input")
+    input.type = "number"
     input.classList.add("itemQuantity")
-    /*
-    Modif de l input
-    */
+    input.name = "itemQuantity"
+    input.min = "1"
+    input.max = "100"
+    input.value = item.quantity
 
     divContentSettingsQuantity.appendChild(input)
 }
