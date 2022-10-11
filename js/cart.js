@@ -1,8 +1,13 @@
 var basketItems = JSON.parse(localStorage.getItem('kanapBasketItems'));
+var totalPrice = 0
 for (let i = 0; i < basketItems.length; i++) {
     displayItem(basketItems[i])
 }
+displayTotalQuantity(basketItems)
+displayTotalPrice()
+
 const cart = []
+var totalPrice = 0
 
 /*  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
 <div class="cart__item__img">
@@ -45,11 +50,9 @@ function kanapBasketItems(kanap, item) {
     makeInput(item, divContentSettingsQuantity)
 
     const divContentSettingsDelete = makeDivContentSettingsDelete(divContentSettings)
+
+    calculTotalPrice(item, price)
 }
-
-
-//takeFromLocalstorage()
-//cart.forEach((item) => displayItem (item))
 
 
 function takeFromLocalstorage() {
@@ -145,7 +148,7 @@ function makeDivContentSettingsQuantity(item, divContentSettings) {
 
 function makeQuantity(item, divContentSettingsQuantity) {
     const quantite = document.createElement("p")
-    quantite.textContent = "Qté : " + item.quantity
+    quantite.textContent = "Qté : " 
     divContentSettingsQuantity.appendChild(quantite)
 }
 
@@ -171,6 +174,33 @@ function makeDivContentSettingsDelete(divContentSettings) {
     deleteItem.textContent = "Supprimer"
     divContentSettingsDelete.appendChild(deleteItem)
 }
+
+function totalQuantity(item) {
+    quantity += item.quantity
+    //console.log(quantity)
+}
+
+function displayTotalQuantity(basket) {
+    
+    var total = 0
+    for (let i = 0; i < basket.length; i++) {
+        //console.log(basket[i].quantity)
+        total += basket[i].quantity
+    }
+    const totalQuantity = document.getElementById("totalQuantity")
+    totalQuantity.textContent = total
+}
+
+function calculTotalPrice(item, price) {
+    totalPrice += item.quantity*price
+}
+
+function displayTotalPrice() {
+    const displayTotalPrice = document.getElementById("totalPrice")
+    displayTotalPrice.textContent = totalPrice
+
+}
+
 
 
 const searchLocation = window.location.search
