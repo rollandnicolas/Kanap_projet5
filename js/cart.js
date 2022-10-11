@@ -4,7 +4,6 @@ for (let i = 0; i < basketItems.length; i++) {
     displayItem(basketItems[i])
 }
 displayTotalQuantity(basketItems)
-displayTotalPrice()
 
 const cart = []
 var totalPrice = 0
@@ -52,6 +51,8 @@ function kanapBasketItems(kanap, item) {
     const divContentSettingsDelete = makeDivContentSettingsDelete(divContentSettings)
 
     calculTotalPrice(item, price)
+    
+    displayTotalPrice()
 }
 
 
@@ -71,6 +72,7 @@ function displayItem(item) {
             // a ce stade, on : 
             // - item : un item du local storage
             // - res : le product retourne par l'API 
+            console.log("item" + item.id)
             kanapBasketItems(res, item)
         })
 
@@ -192,11 +194,15 @@ function displayTotalQuantity(basket) {
 }
 
 function calculTotalPrice(item, price) {
-    totalPrice += item.quantity*price
+    console.log(item)
+    console.log(price)    
+    totalPrice += (item.quantity*price)
+    console.log(totalPrice)
 }
 
 function displayTotalPrice() {
     const displayTotalPrice = document.getElementById("totalPrice")
+    console.log("display total price " + totalPrice)
     displayTotalPrice.textContent = totalPrice
 
 }
