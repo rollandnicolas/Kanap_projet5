@@ -3,10 +3,18 @@ var totalPrice = 0
 for (let i = 0; i < basketItems.length; i++) {
     displayItem(basketItems[i])
 }
+
+
 displayTotalQuantity(basketItems)
 
 const cart = []
 var totalPrice = 0
+displayTotalPrice()
+
+
+const orderButton = document.getElementById("order")
+orderButton.addEventListener("click", (e) => submitForm(e))
+
 
 /*  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
 <div class="cart__item__img">
@@ -72,7 +80,6 @@ function displayItem(item) {
             // a ce stade, on : 
             // - item : un item du local storage
             // - res : le product retourne par l'API 
-            console.log("item" + item.id)
             kanapBasketItems(res, item)
         })
 
@@ -162,6 +169,8 @@ function makeInput(item, divContentSettingsQuantity) {
     input.min = "1"
     input.max = "100"
     input.value = item.quantity
+   
+    input.addEventListener("change",  () => updateQuantityAndPrice(item.id, input.value))
 
     divContentSettingsQuantity.appendChild(input)
 }
@@ -169,12 +178,17 @@ function makeInput(item, divContentSettingsQuantity) {
 function makeDivContentSettingsDelete(divContentSettings) {
     const divContentSettingsDelete = document.createElement("div")
     divContentSettingsDelete.classList.add("cart__item__content__settings__delete")
+    divContentSettingsDelete.addEventListener("click", () => deleteItem(item))
     divContentSettings.appendChild(divContentSettingsDelete)
 
     const deleteItem = document.createElement("p")
     deleteItem.classList.add("deleteItem")
     deleteItem.textContent = "Supprimer"
     divContentSettingsDelete.appendChild(deleteItem)
+}
+
+function deleteItem(item) {
+    console.log("item to delete", item)
 }
 
 function totalQuantity(item) {
@@ -194,23 +208,100 @@ function displayTotalQuantity(basket) {
 }
 
 function calculTotalPrice(item, price) {
-    console.log(item)
-    console.log(price)    
-    totalPrice += (item.quantity*price)
-    console.log(totalPrice)
+    totalPrice += item.quantity*price
 }
 
 function displayTotalPrice() {
     const displayTotalPrice = document.getElementById("totalPrice")
-    console.log("display total price " + totalPrice)
     displayTotalPrice.textContent = totalPrice
 
 }
+
+function updateQuantityAndPrice(id, newValue, item) {
+
+    const itemToUpdate = cart.find((item) => item.id === id)
+    
+    console.log("itemToUpdate", itemToUpdate)
+    itemToUpdate.quantity = Number(newValue)
+
+    displayTotalQuantity(basket)
+    displayTotalPrice()
+    saveNewBasketToLocalStorage(item)
+}
+
+function saveNewBasketToLocalStorage(item) {
+    const dataToSave = JSON.stringify(item)
+    console.log(dataToSave)
+    localStorage.setItem(item.id, dataToSave)
+}
+
+
+/////////////////// FORMULAIRE //////////////////////
+
+
+function submitForm(e) {
+    e.preventDefault()
+    console.log(basketItems)
+    if (basketItems.length === 0) alert("Votre panier est vide")
+
+    const form = document.querySelector(".cart__order__form")
+    const objectToApi = makeRequestObject()
+
+    fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        body: JSON.stringify(objectToApi)
+    })
+    .then((res) => res.json())
+    .then((data) => console.log(data))
+   console.log(form.elements.firstName.value)
+}
+
+function makeRequestObject() {
+    const form = document.querySelector(".cart__order__form")
+    const firstName = form.elements.firstName.value
+    const lastName = form.elements.lastName.value
+    const address = form.elements.address.value
+    const city = form.elements.city.value
+    const email = form.elements.email.value
+
+
+    const objectToApi = { 
+        contact: {
+        firstName: firstName,
+        lastName: lastName,
+        address: address,
+        city: city,
+        email: email
+    },
+    product: getIdsFromLocalStorage
+    }
+    console.log(getIdsFromLocalStorage)
+
+    console.log(objectToApi)
+    return objectToApi
+
+    }
+
+    function getIdsFromLocalStorage(item) {
+        const numberOfProducts = localStorage.length
+        const ids = []
+        for (let i = 0; i < numberOfProducts; i++) {
+            const key = localStorage.key(i)
+            console.log(key)
+            const id = item.id
+        }
+
+    }
+
+
 
 
 
 const searchLocation = window.location.search
 const item = localStorage.getItem("item")
+
+
+
 
 
 
