@@ -133,7 +133,7 @@ function makeName(name, divContent) {
 
 function makeColor(item, divContent) {
     const p1 = document.createElement("p")
-    p1.id = 'color-' + item.id
+    // p1.id = 'color-' + item.id + '-' + item.color
     p1.textContent = item.color
     divContent.appendChild(p1)
 }
@@ -168,7 +168,7 @@ function makeQuantity(item, divContentSettingsQuantity) {
 
 function makeInput(item, divContentSettingsQuantity) {
     const input = document.createElement("input")
-    input.id = "qty-" + item.id
+    input.id = "qty-" + item.id + '-' + item.color
     input.type = "number"
     input.classList.add("itemQuantity")
     input.name = "itemQuantity"
@@ -176,7 +176,7 @@ function makeInput(item, divContentSettingsQuantity) {
     input.max = "100"
     input.value = item.quantity
    
-    input.addEventListener("change",  () => updateQuantityAndPrice(item.id))
+    input.addEventListener("change",  () => updateQuantityAndPrice(item.id, item.color))
 
     divContentSettingsQuantity.appendChild(input)
 }
@@ -230,10 +230,9 @@ function updateTotalPrice(basketItems) {
     totalQuantity.textContent = total    
 }
 
-function updateQuantityAndPrice(id) 
+function updateQuantityAndPrice(id, color) 
 {
-    let color = document.getElementById("color-" + id).innerText
-    let qty = Number(document.getElementById("qty-" + id).value)
+    let qty = Number(document.getElementById("qty-" + id + '-' + color).value)
     console.log("Updating basket item id : " + id + ", color : " + color + " to quantity " + qty)
     for (let i = 0 ; i < basketItems.length; i++) {
         if (basketItems[i].id === id && basketItems[i].color === color) {
