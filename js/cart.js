@@ -250,6 +250,7 @@ function submitForm(e) {
     fetch("http://localhost:3000/api/products/order", {
         method: "POST",
         body: JSON.stringify(objectToApi)
+        //headers:
     })
     .then((res) => res.json())
     .then((data) => console.log(data))
@@ -283,7 +284,7 @@ function makeRequestObject() {
     }
 
     function getIdsFromLocalStorage(item) {
-        const numberOfProducts = localStorage.length
+        JSON.parse(localStorage.getItems("basketItems")).length
         const ids = []
         for (let i = 0; i < numberOfProducts; i++) {
             const key = localStorage.key(i)
