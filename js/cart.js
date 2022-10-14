@@ -1,3 +1,4 @@
+var kanaps = {}
 var basketItems = JSON.parse(localStorage.getItem('kanapBasketItems'));
 var totalPrice = 0
 for (let i = 0; i < basketItems.length; i++) {
@@ -7,7 +8,7 @@ for (let i = 0; i < basketItems.length; i++) {
 
 displayTotalQuantity(basketItems)
 
-const cart = []
+// const cart = []
 var totalPrice = 0
 displayTotalPrice()
 
@@ -39,6 +40,9 @@ orderButton.addEventListener("click", (e) => submitForm(e))
 </article> */
 
 function kanapBasketItems(kanap, item) {
+    if (typeof kanaps[kanap._id] == "undefined") {
+        kanaps[kanap._id] = kanap
+    }
     const { altTxt, colors, description, imageUrl, name, price, id } = kanap
     const article = makeArticle(item)
 
@@ -64,14 +68,14 @@ function kanapBasketItems(kanap, item) {
 }
 
 
-function takeFromLocalstorage() {
+/* function takeFromLocalstorage() {
     const numberOfItems = localStorage.length
     for (let i = 0; i < numberOfItems; i++) {
         const item = localStorage.getItem(localStorage.key(i))
         const itemObject = JSON.parse(item)
         cart.push(itemObject)
     }
-}
+} */
 
 function displayItem(item) {
     fetch(`http://localhost:3000/api/products/${item.id}`)
@@ -129,6 +133,7 @@ function makeName(name, divContent) {
 
 function makeColor(item, divContent) {
     const p1 = document.createElement("p")
+    p1.id = 'color-' + item.id
     p1.textContent = item.color
     divContent.appendChild(p1)
 }
@@ -163,6 +168,7 @@ function makeQuantity(item, divContentSettingsQuantity) {
 
 function makeInput(item, divContentSettingsQuantity) {
     const input = document.createElement("input")
+    input.id = "qty-" + item.id
     input.type = "number"
     input.classList.add("itemQuantity")
     input.name = "itemQuantity"
@@ -170,7 +176,7 @@ function makeInput(item, divContentSettingsQuantity) {
     input.max = "100"
     input.value = item.quantity
    
-    input.addEventListener("change",  () => updateQuantityAndPrice(item.id, input.value))
+    input.addEventListener("change",  () => updateQuantityAndPrice(item.id))
 
     divContentSettingsQuantity.appendChild(input)
 }
@@ -191,20 +197,19 @@ function deleteItem(item) {
     console.log("item to delete", item)
 }
 
-function totalQuantity(item) {
+/* function totalQuantity(item) {
     quantity += item.quantity
     //console.log(quantity)
-}
+} */
 
-function displayTotalQuantity(basket) {
-    
+function displayTotalQuantity(basket) {    
     var total = 0
     for (let i = 0; i < basket.length; i++) {
         //console.log(basket[i].quantity)
         total += basket[i].quantity
     }
-    const totalQuantity = document.getElementById("totalQuantity")
-    totalQuantity.textContent = total
+    const totalQuantity = document.getElementById("totalQuantity")    
+    totalQuantity.textContent = total    
 }
 
 function calculTotalPrice(item, price) {
@@ -214,27 +219,33 @@ function calculTotalPrice(item, price) {
 function displayTotalPrice() {
     const displayTotalPrice = document.getElementById("totalPrice")
     displayTotalPrice.textContent = totalPrice
-
 }
 
-function updateQuantityAndPrice(id, newValue, item) {
-
-    const itemToUpdate = cart.find((item) => item.id === id)
-    
-    console.log("itemToUpdate", itemToUpdate)
-    itemToUpdate.quantity = Number(newValue)
-
-    displayTotalQuantity(basket)
-    displayTotalPrice()
-    saveNewBasketToLocalStorage(item)
+function updateTotalPrice(basketItems) {    
+    var total = 0
+    for (let i = 0; i < basketItems.length; i++) {        
+        total += basketItems[i].quantity * kanaps[basketItems[i].id].price
+    }
+    const totalQuantity = document.getElementById("totalPrice")    
+    totalQuantity.textContent = total    
 }
 
-function saveNewBasketToLocalStorage(item) {
-    const dataToSave = JSON.stringify(item)
-    console.log(dataToSave)
-    localStorage.setItem(item.id, dataToSave)
-}
+function updateQuantityAndPrice(id) 
+{
+    let color = document.getElementById("color-" + id).innerText
+    let qty = Number(document.getElementById("qty-" + id).value)
+    console.log("Updating basket item id : " + id + ", color : " + color + " to quantity " + qty)
+    for (let i = 0 ; i < basketItems.length; i++) {
+        if (basketItems[i].id === id && basketItems[i].color === color) {
+            basketItems[i].quantity = qty            
+            break;
+        }
+    }
+    localStorage.setItem('kanapBasketItems', JSON.stringify(basketItems))
 
+    displayTotalQuantity(basketItems)
+    updateTotalPrice(basketItems)    
+}
 
 /////////////////// FORMULAIRE //////////////////////
 
