@@ -57,13 +57,13 @@ function kanapBasketItems(kanap, item) {
     const divContentSettingsQuantity = makeDivContentSettingsQuantity(item, divContentSettings)
 
     makeQuantity(item, divContentSettingsQuantity)
-    
+
     makeInput(item, divContentSettingsQuantity)
 
-    const divContentSettingsDelete = makeDivContentSettingsDelete(divContentSettings)
+    makeDivContentSettingsDelete(item, divContentSettings)
 
     calculTotalPrice(item, price)
-    
+
     displayTotalPrice()
 }
 
@@ -162,7 +162,7 @@ function makeDivContentSettingsQuantity(item, divContentSettings) {
 
 function makeQuantity(item, divContentSettingsQuantity) {
     const quantite = document.createElement("p")
-    quantite.textContent = "Qté : " 
+    quantite.textContent = "Qté : "
     divContentSettingsQuantity.appendChild(quantite)
 }
 
@@ -175,26 +175,43 @@ function makeInput(item, divContentSettingsQuantity) {
     input.min = "1"
     input.max = "100"
     input.value = item.quantity
-   
-    input.addEventListener("change",  () => updateQuantityAndPrice(item.id, item.color))
+
+    input.addEventListener("change", () => updateQuantityAndPrice(item))
 
     divContentSettingsQuantity.appendChild(input)
 }
 
-function makeDivContentSettingsDelete(divContentSettings) {
+function makeDivContentSettingsDelete(item, divContentSettings) {
     const divContentSettingsDelete = document.createElement("div")
     divContentSettingsDelete.classList.add("cart__item__content__settings__delete")
     divContentSettingsDelete.addEventListener("click", () => deleteItem(item))
     divContentSettings.appendChild(divContentSettingsDelete)
 
-    const deleteItem = document.createElement("p")
-    deleteItem.classList.add("deleteItem")
-    deleteItem.textContent = "Supprimer"
-    divContentSettingsDelete.appendChild(deleteItem)
+    const pItem = document.createElement("p")
+    pItem.classList.add("deleteItem")
+    pItem.textContent = "Supprimer"
+    divContentSettingsDelete.appendChild(pItem)
 }
 
 function deleteItem(item) {
     console.log("item to delete", item)
+    let index = 0
+    for (index; index < basketItems.length; index++) {
+        if (basketItems[index].id === item.id && basketItems[index].color === item.color) {
+            break;
+        }
+    }
+    basketItems.splice(index, 1)
+
+    localStorage.setItem('kanapBasketItems', JSON.stringify(basketItems))
+
+    displayTotalQuantity(basketItems)
+    updateTotalPrice(basketItems)
+
+    console.log("localStorage updated")
+    const articleToDelete = document.querySelector("[data-id=" + "\"" + item.id + "\"" + "][data-color=" + "\"" + item.color + "\"" + "]")
+    articleToDelete.parentNode.removeChild(articleToDelete)
+
 }
 
 /* function totalQuantity(item) {
@@ -202,18 +219,18 @@ function deleteItem(item) {
     //console.log(quantity)
 } */
 
-function displayTotalQuantity(basket) {    
+function displayTotalQuantity(basket) {
     var total = 0
     for (let i = 0; i < basket.length; i++) {
         //console.log(basket[i].quantity)
         total += basket[i].quantity
     }
-    const totalQuantity = document.getElementById("totalQuantity")    
-    totalQuantity.textContent = total    
+    const totalQuantity = document.getElementById("totalQuantity")
+    totalQuantity.textContent = total
 }
 
 function calculTotalPrice(item, price) {
-    totalPrice += item.quantity*price
+    totalPrice += item.quantity * price
 }
 
 function displayTotalPrice() {
@@ -221,29 +238,32 @@ function displayTotalPrice() {
     displayTotalPrice.textContent = totalPrice
 }
 
-function updateTotalPrice(basketItems) {    
+
+
+function updateTotalPrice(basketItems) {
     var total = 0
-    for (let i = 0; i < basketItems.length; i++) {        
+    for (let i = 0; i < basketItems.length; i++) {
         total += basketItems[i].quantity * kanaps[basketItems[i].id].price
     }
-    const totalQuantity = document.getElementById("totalPrice")    
-    totalQuantity.textContent = total    
+    const totalQuantity = document.getElementById("totalPrice")
+    totalQuantity.textContent = total
 }
 
-function updateQuantityAndPrice(id, color) 
-{
-    let qty = Number(document.getElementById("qty-" + id + '-' + color).value)
-    console.log("Updating basket item id : " + id + ", color : " + color + " to quantity " + qty)
-    for (let i = 0 ; i < basketItems.length; i++) {
-        if (basketItems[i].id === id && basketItems[i].color === color) {
-            basketItems[i].quantity = qty            
+
+
+function updateQuantityAndPrice(item) {
+    let qty = Number(document.getElementById("qty-" + item.id + '-' + item.color).value)
+    console.log("Updating basket item id : " + item.id + ", color : " + item.color + " to quantity " + qty)
+    for (let i = 0; i < basketItems.length; i++) {
+        if (basketItems[i].id === item.id && basketItems[i].color === item.color) {
+            basketItems[i].quantity = qty
             break;
         }
     }
     localStorage.setItem('kanapBasketItems', JSON.stringify(basketItems))
 
     displayTotalQuantity(basketItems)
-    updateTotalPrice(basketItems)    
+    updateTotalPrice(basketItems)
 }
 
 /////////////////// FORMULAIRE //////////////////////
@@ -252,19 +272,40 @@ function updateQuantityAndPrice(id, color)
 function submitForm(e) {
     e.preventDefault()
     console.log(basketItems)
-    if (basketItems.length === 0) alert("Votre panier est vide")
+    if (basketItems.length === 0) {
+        alert("Votre panier est vide")
+        return
+    }
+
+    //if (emailWrong()) return
 
     const form = document.querySelector(".cart__order__form")
     const objectToApi = makeRequestObject()
 
     fetch("http://localhost:3000/api/products/order", {
         method: "POST",
-        body: JSON.stringify(objectToApi)
-        //headers:
+        body: objectToApi,
+        headers: {
+            "Content-Type": "application/json",
+        }
     })
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-   console.log(form.elements.firstName.value)
+        .then((res) => res.json())
+        .then((data) => { console.log(data)} )
+        .catch((e) => { console.log(e)})
+}
+
+//function validateFormulary() 
+
+function emailWrong() {
+    const email = document.getElementById("email")
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+    if (regex.test(email) === false) {
+        alert("email invalide")
+        return true
+    }
+    else {
+        return false
+    }
 }
 
 function makeRequestObject() {
@@ -276,33 +317,37 @@ function makeRequestObject() {
     const email = form.elements.email.value
 
 
-    const objectToApi = { 
-        contact: {
+    const contact = {
         firstName: firstName,
         lastName: lastName,
         address: address,
         city: city,
         email: email
-    },
-    product: getIdsFromLocalStorage
     }
-    console.log(getIdsFromLocalStorage)
+
+    const products = getIdsFromLocalStorage()
+
+    const objectToApi = JSON.stringify({ contact, products })
+
 
     console.log(objectToApi)
     return objectToApi
 
-    }
+}
 
-    function getIdsFromLocalStorage(item) {
-        JSON.parse(localStorage.getItems("basketItems")).length
-        const ids = []
-        for (let i = 0; i < numberOfProducts; i++) {
-            const key = localStorage.key(i)
-            console.log(key)
-            const id = item.id
-        }
+function getIdsFromLocalStorage(item) {
+    console.log(basketItems)
+    let products = []
 
+    for (let i = 0; i < basketItems.length; i++) {
+        console.log(basketItems[i])
+        products.push(basketItems[i].id)
+ 
     }
+    console.log(products)
+    return products
+
+}
 
 
 
