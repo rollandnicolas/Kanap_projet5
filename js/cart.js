@@ -43,7 +43,7 @@ function kanapBasketItems(kanap, item) {
     if (typeof kanaps[kanap._id] == "undefined") {
         kanaps[kanap._id] = kanap
     }
-    const { altTxt, colors, description, imageUrl, name, price, id } = kanap
+    const { altTxt, imageUrl, name, price} = kanap
     const article = makeArticle(item)
 
     makeDivImage(imageUrl, altTxt, article)
@@ -288,8 +288,12 @@ function submitForm(e) {
         }
     })
         .then((res) => res.json())
-        .then((data) => { console.log(data)} )
-        .catch((e) => { console.log(e)})
+        .then((data) => { 
+        const orderId = data.orderId
+        window.location.href = "/html/confirmation.html" + "?orderId=" + orderId
+        return console.log(data) 
+    })
+        .catch((e) => { console.log(e) })
 }
 
 const firstName = document.getElementById("firstName")
@@ -297,12 +301,13 @@ const lastName = document.getElementById("lastName")
 const address = document.getElementById("address")
 const city = document.getElementById("city")
 const email = document.getElementById("email")
+console.log("coucou")
 
 let valueFirstname, valueLastName, valueAddress, valueCity, valueEmail;
 
-firstName.addEventListener("input" , function (e) {
+firstName.addEventListener("input", function (e) {
     valueFirstname;
-    if(e.target.value.length == 0){
+    if (e.target.value.length == 0) {
         firstNameErrorMsg.innerHTML = "le champ prénom n'est pas rempli"
         valueFirstname = null;
         console.log(valueFirstname)
@@ -311,10 +316,12 @@ firstName.addEventListener("input" , function (e) {
         firstNameErrorMsg.innerHTML = "le prénom doit contenir entre 2 et 25 caractères"
         valueFirstname = null
     }
-    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)){
+    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)) {
         firstNameErrorMsg.innerHTML = ""
         valueFirstname = e.target.value
         console.log("succes")
+        console.log("coucou")
+
     }
     if (
         !e.target.value.match(/^[a-z A-Z]{2,25}$/) &&
@@ -322,12 +329,13 @@ firstName.addEventListener("input" , function (e) {
         e.target.value.length < 25) {
         firstNameErrorMsg.innerHTML = "ce champ ne doit pas contenir de caractères spéciaux, accent, ou chiffre";
         valueFirstname = "null";
+        return
     }
 });
 
-lastName.addEventListener("input" , function (e) {
+lastName.addEventListener("input", function (e) {
     valueLastName;
-    if(e.target.value.length == 0){
+    if (e.target.value.length == 0) {
         lastNameErrorMsg.innerHTML = "le champ nom n'est pas rempli"
         valueLastname = null;
     }
@@ -335,7 +343,7 @@ lastName.addEventListener("input" , function (e) {
         lastNameErrorMsg.innerHTML = "le nom doit contenir entre 2 et 25 caractères"
         valueLastname = null
     }
-    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)){
+    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)) {
         lastNameErrorMsg.innerHTML = ""
         valueLastname = e.target.value
         console.log("succes")
@@ -349,9 +357,9 @@ lastName.addEventListener("input" , function (e) {
     }
 });
 
-address.addEventListener("input" , function (e) {
+address.addEventListener("input", function (e) {
     valueAddress;
-    if(e.target.value.length == 0){
+    if (e.target.value.length == 0) {
         AddressErrorMsg.innerHTML = "le champ nom n'est pas rempli"
         valueAddress = null;
     }
@@ -359,7 +367,7 @@ address.addEventListener("input" , function (e) {
         addressErrorMsg.innerHTML = "l'adresse doit contenir entre 3 et 35 caractères"
         valueAddress = null
     }
-    if (e.target.value.match(/^[0-9]{1,3} [a-z A-Z]{3,35}$/)){
+    if (e.target.value.match(/^[0-9]{1,3} [a-z A-Z]{3,35}$/)) {
         addressErrorMsg.innerHTML = ""
         valueAddress = e.target.value
         console.log("succes")
@@ -373,9 +381,9 @@ address.addEventListener("input" , function (e) {
     }
 });
 
-city.addEventListener("input" , function (e) {
+city.addEventListener("input", function (e) {
     valueCity;
-    if(e.target.value.length == 0){
+    if (e.target.value.length == 0) {
         cityErrorMsg.innerHTML = "le champ ville n'est pas rempli"
         valueCity = null;
         console.log(valueFirstname)
@@ -384,7 +392,7 @@ city.addEventListener("input" , function (e) {
         cityErrorMsg.innerHTML = "la ville doit contenir entre 2 et 25 caractères"
         valueCity = null
     }
-    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)){
+    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)) {
         cityErrorMsg.innerHTML = ""
         valueCity = e.target.value
         console.log("succes")
@@ -395,6 +403,34 @@ city.addEventListener("input" , function (e) {
         e.target.value.length < 25) {
         cityErrorMsg.innerHTML = "ce champ ne doit pas contenir de caractères spéciaux, accent, ou chiffre";
         valueCity = "null";
+        console.log("coucou")
+
+    }
+});
+
+email.addEventListener("input", (e) => {
+    if (e.target.value.lenght == 0) {
+        emailErrorMsg.innerHTML = "champ vide";
+        valueEmail = null;
+        console.log(valueEmail)
+        console.log("coucou")
+
+    }
+
+    //autre regex email /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+
+   else if (e.target.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+        emailErrorMsg.innerHTML = "";
+        valueEmail = e.target.value;
+        console.log(valueEmail)
+    }
+    if (!e.target.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) &&
+        !e.target.value.lenght == 0) {
+        emailErrorMsg.innerHTML = "email non valide, exemple valide: jack@outlook.fr"
+        valueEmail = null;
+        console.log(valueEmail)
+        console.log("coucou")
+
     }
 });
 
@@ -431,7 +467,7 @@ function getIdsFromLocalStorage(item) {
     for (let i = 0; i < basketItems.length; i++) {
         console.log(basketItems[i])
         products.push(basketItems[i].id)
- 
+
     }
     console.log(products)
     return products
