@@ -277,8 +277,6 @@ function submitForm(e) {
         return
     }
 
-    //if (emailWrong()) return
-
     const form = document.querySelector(".cart__order__form")
     const objectToApi = makeRequestObject()
 
@@ -294,19 +292,113 @@ function submitForm(e) {
         .catch((e) => { console.log(e)})
 }
 
-//function validateFormulary() 
+const firstName = document.getElementById("firstName")
+const lastName = document.getElementById("lastName")
+const address = document.getElementById("address")
+const city = document.getElementById("city")
+const email = document.getElementById("email")
 
-function emailWrong() {
-    const email = document.getElementById("email")
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
-    if (regex.test(email) === false) {
-        alert("email invalide")
-        return true
+let valueFirstname, valueLastName, valueAddress, valueCity, valueEmail;
+
+firstName.addEventListener("input" , function (e) {
+    valueFirstname;
+    if(e.target.value.length == 0){
+        firstNameErrorMsg.innerHTML = "le champ prénom n'est pas rempli"
+        valueFirstname = null;
+        console.log(valueFirstname)
     }
-    else {
-        return false
+    else if (e.target.value.length < 2 || e.target.value.length > 25) {
+        firstNameErrorMsg.innerHTML = "le prénom doit contenir entre 2 et 25 caractères"
+        valueFirstname = null
     }
-}
+    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)){
+        firstNameErrorMsg.innerHTML = ""
+        valueFirstname = e.target.value
+        console.log("succes")
+    }
+    if (
+        !e.target.value.match(/^[a-z A-Z]{2,25}$/) &&
+        e.target.value.length > 2 &&
+        e.target.value.length < 25) {
+        firstNameErrorMsg.innerHTML = "ce champ ne doit pas contenir de caractères spéciaux, accent, ou chiffre";
+        valueFirstname = "null";
+    }
+});
+
+lastName.addEventListener("input" , function (e) {
+    valueLastName;
+    if(e.target.value.length == 0){
+        lastNameErrorMsg.innerHTML = "le champ nom n'est pas rempli"
+        valueLastname = null;
+    }
+    else if (e.target.value.length < 2 || e.target.value.length > 25) {
+        lastNameErrorMsg.innerHTML = "le nom doit contenir entre 2 et 25 caractères"
+        valueLastname = null
+    }
+    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)){
+        lastNameErrorMsg.innerHTML = ""
+        valueLastname = e.target.value
+        console.log("succes")
+    }
+    if (
+        !e.target.value.match(/^[a-z A-Z]{2,25}$/) &&
+        e.target.value.length > 2 &&
+        e.target.value.length < 25) {
+        lastNameErrorMsg.innerHTML = "ce champ ne doit pas contenir de caractères spéciaux, accent, ou chiffre";
+        valueLastname = "null";
+    }
+});
+
+address.addEventListener("input" , function (e) {
+    valueAddress;
+    if(e.target.value.length == 0){
+        AddressErrorMsg.innerHTML = "le champ nom n'est pas rempli"
+        valueAddress = null;
+    }
+    else if (e.target.value.length < 3 || e.target.value.length > 35) {
+        addressErrorMsg.innerHTML = "l'adresse doit contenir entre 3 et 35 caractères"
+        valueAddress = null
+    }
+    if (e.target.value.match(/^[0-9]{1,3} [a-z A-Z]{3,35}$/)){
+        addressErrorMsg.innerHTML = ""
+        valueAddress = e.target.value
+        console.log("succes")
+    }
+    if (
+        !e.target.value.match(/^[0-9]{1,3} [a-z A-Z]{3,35}$/) &&
+        e.target.value.length > 3 &&
+        e.target.value.length < 35) {
+        addressErrorMsg.innerHTML = "ce champ doit commencer par des chiffres puis des lettres, caractères spéciaux et accents invalides";
+        valueAddress = "null";
+    }
+});
+
+city.addEventListener("input" , function (e) {
+    valueCity;
+    if(e.target.value.length == 0){
+        cityErrorMsg.innerHTML = "le champ ville n'est pas rempli"
+        valueCity = null;
+        console.log(valueFirstname)
+    }
+    else if (e.target.value.length < 2 || e.target.value.length > 25) {
+        cityErrorMsg.innerHTML = "la ville doit contenir entre 2 et 25 caractères"
+        valueCity = null
+    }
+    if (e.target.value.match(/^[a-z A-Z]{2,25}$/)){
+        cityErrorMsg.innerHTML = ""
+        valueCity = e.target.value
+        console.log("succes")
+    }
+    if (
+        !e.target.value.match(/^[a-z A-Z]{2,25}$/) &&
+        e.target.value.length > 2 &&
+        e.target.value.length < 25) {
+        cityErrorMsg.innerHTML = "ce champ ne doit pas contenir de caractères spéciaux, accent, ou chiffre";
+        valueCity = "null";
+    }
+});
+
+
 
 function makeRequestObject() {
     const form = document.querySelector(".cart__order__form")
@@ -315,7 +407,6 @@ function makeRequestObject() {
     const address = form.elements.address.value
     const city = form.elements.city.value
     const email = form.elements.email.value
-
 
     const contact = {
         firstName: firstName,
@@ -329,10 +420,8 @@ function makeRequestObject() {
 
     const objectToApi = JSON.stringify({ contact, products })
 
-
     console.log(objectToApi)
     return objectToApi
-
 }
 
 function getIdsFromLocalStorage(item) {
