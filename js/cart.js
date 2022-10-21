@@ -43,7 +43,7 @@ function kanapBasketItems(kanap, item) {
     if (typeof kanaps[kanap._id] == "undefined") {
         kanaps[kanap._id] = kanap
     }
-    const { altTxt, imageUrl, name, price} = kanap
+    const { altTxt, imageUrl, name, price } = kanap
     const article = makeArticle(item)
 
     makeDivImage(imageUrl, altTxt, article)
@@ -277,7 +277,6 @@ function submitForm(e) {
         return
     }
 
-    const form = document.querySelector(".cart__order__form")
     const objectToApi = makeRequestObject()
 
     fetch("http://localhost:3000/api/products/order", {
@@ -288,11 +287,11 @@ function submitForm(e) {
         }
     })
         .then((res) => res.json())
-        .then((data) => { 
-        const orderId = data.orderId
-        window.location.href = "/html/confirmation.html" + "?orderId=" + orderId
-        return console.log(data) 
-    })
+        .then((data) => {
+            const orderId = data.orderId
+            window.location.href = "/html/confirmation.html" + "?orderId=" + orderId
+            return console.log(data)
+        })
         .catch((e) => { console.log(e) })
 }
 
@@ -408,7 +407,8 @@ city.addEventListener("input", function (e) {
     }
 });
 
-email.addEventListener("input", (e) => {
+email.addEventListener("input", function (e) {
+    valueEmail;
     if (e.target.value.lenght == 0) {
         emailErrorMsg.innerHTML = "champ vide";
         valueEmail = null;
@@ -419,7 +419,7 @@ email.addEventListener("input", (e) => {
 
     //autre regex email /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
-   else if (e.target.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+    else if (e.target.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
         emailErrorMsg.innerHTML = "";
         valueEmail = e.target.value;
         console.log(valueEmail)
@@ -473,9 +473,6 @@ function getIdsFromLocalStorage(item) {
     return products
 
 }
-
-
-
 
 
 const searchLocation = window.location.search
