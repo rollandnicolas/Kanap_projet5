@@ -6,7 +6,6 @@ function getOrderId() {
 const searchLocation = window.location.search
 const urlParameters = new URLSearchParams(searchLocation)
 return urlParameters.get("orderId")
-console.log(orderId)
 }
 
 function displayOrderId(orderId) {

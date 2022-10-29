@@ -1,32 +1,10 @@
 fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
     .then((data) => {
-
       return addProducts(data)
-
     })
 
   function addProducts (data) {
-
-    /* for (let i = 0 ; i < data.length; i++) {
-      let kanap = data[i];
-      const id = kanap._id
-      const imageUrl = kanap.imageUrl
-      const altTxt = kanap.altTxt
-      const name = kanap.name
-      const description = kanap.description
-      const image = makeImage(imageUrl, altTxt)
-      const anchor = makeAnchor(id)
-      const article = makeArticle("article")
-      const h3 = makeH3(name)
-      const p = makeParagraph(description)
-      article.appendChild(image)
-      article.appendChild(h3)
-      article.appendChild(p)
-      appendArticleToAnchor(anchor, article)
-    } */
-    
-
     data.forEach((kanap) => {
     
       const id = kanap._id
@@ -39,7 +17,6 @@ fetch("http://localhost:3000/api/products")
       const article = makeArticle("article")
       const h3 = makeH3(name)
       const p = makeParagraph(description)
-
 
       article.appendChild(image)
       article.appendChild(h3)
@@ -73,36 +50,17 @@ function makeArticle() {
   const article = document.createElement("article")
   return article
 }
+
 function makeH3(name) {
   const h3 = document.createElement("h3")
   h3.textContent = name
   h3.classList.add("productName")
   return h3
 }
+
 function makeParagraph(description) {
   const p = document.createElement("p")
   p.textContent = description
   p.classList.add("productDescription")
   return p
 }
- 
- 
- 
- 
- 
- 
-    /* .then((data) => {
-        for (let i = 0 ; i < data.length; i++) { 
-          const imageUrl = data[i].imageUrl
-
-          const anchor = document.createElement("a")
-          anchor.href = imageUrl
-          anchor.text = data[i].name
-
-          const items = document.querySelector("#items")
-          items.appendChild(anchor)
-          console.log("ajout du lien")
-      } 
-    })
-
-  */
