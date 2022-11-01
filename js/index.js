@@ -1,8 +1,12 @@
+///// requete get fetch ///////////
+
 fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
     .then((data) => {
       return addProducts(data)
     })
+
+  ///// fonction principale "presentation des datas" /////////////////
 
   function addProducts (data) {
     data.forEach((kanap) => {
@@ -24,6 +28,8 @@ fetch("http://localhost:3000/api/products")
       appendArticleToAnchor(anchor, article)
     })
   }
+
+/////////// lien vers la page produit ////////////
 
   function makeAnchor (id) {
     const anchor = document.createElement("a")

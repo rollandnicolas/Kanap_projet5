@@ -2,8 +2,6 @@ const searchLocation = window.location.search
 const urlParameters = new URLSearchParams(searchLocation)
 const id = urlParameters.get("id")
 
-if (id != null ) {
-}
 
 fetch(`http://localhost:3000/api/products/${id}`)
 .then(response => response.json())
@@ -53,6 +51,8 @@ function makeColors(colors) {
     }
 }
 
+////// bouton "ajouter au panier" /////////////////
+
 const button = document.getElementById('addToCart')
 if (button != null) {
     button.addEventListener("click", (e) => {
@@ -82,14 +82,7 @@ if (button != null) {
             }
             basketItems.push(data);
         }
-
-        // document.getElementById('addToCart').setAttribute = ('disabled', 'disabled');
-        // document.getElementById('addToCart').setAttribute = ('disabled', '');
-        
-        // JQuery
-        // $('#addToCard').disabled();
-
-        // fin de la condition        
+     
         localStorage.setItem("kanapBasketItems", JSON.stringify(basketItems)) // JSON.parse
         window.location.href = "cart.html"                
     })

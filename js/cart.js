@@ -14,6 +14,7 @@ displayTotalPrice()
 const orderButton = document.getElementById("order")
 orderButton.addEventListener("click", (e) => submitForm(e))
 
+///// fonction principale ////////////
 
 function kanapBasketItems(kanap, item) {
     if (typeof kanaps[kanap._id] == "undefined") {
@@ -45,6 +46,8 @@ function displayItem(item) {
             kanapBasketItems(res, item)
         })
 }
+ 
+////// Creation des articles, div, image, etc... /////////////////////
 
 function makeArticle(item) {
     const article = document.createElement("article")
@@ -131,6 +134,8 @@ function makeInput(item, divContentSettingsQuantity) {
     divContentSettingsQuantity.appendChild(input)
 }
 
+/////// bouton "supprimer" ////////////
+
 function makeDivContentSettingsDelete(item, divContentSettings) {
     const divContentSettingsDelete = document.createElement("div")
     divContentSettingsDelete.classList.add("cart__item__content__settings__delete")
@@ -158,6 +163,8 @@ function deleteItem(item) {
     const articleToDelete = document.querySelector("[data-id=" + "\"" + item.id + "\"" + "][data-color=" + "\"" + item.color + "\"" + "]")
     articleToDelete.parentNode.removeChild(articleToDelete)
 }
+
+///// calcul nombre total d'articles + prix total ///////////////
 
 function displayTotalQuantity(basket) {
     var total = 0
@@ -238,6 +245,8 @@ function submitForm(e) {
         .catch((e) => { console.log(e) })
 }
 
+//// utilisation des regex ////////////////
+
 let valueFirstname, valueLastName, valueAddress, valueCity, valueEmail;
 
 firstName.addEventListener("input", function (e) {
@@ -314,12 +323,12 @@ address.addEventListener("input", function (e) {
 city.addEventListener("input", function (e) {
     valueCity;
     if (e.target.value.length == 0) {
-        cityErrorMsg.innerHTML = "le champ ville n'est pas rempli"
+        cityErrorMsg.innerHTML = "le champ ville n'est pas rempli" 
         valueCity = null;
         console.log(valueFirstname)
     }
     else if (e.target.value.length < 2 || e.target.value.length > 25) {
-        cityErrorMsg.innerHTML = "la ville doit contenir entre 2 et 25 caractères"
+        cityErrorMsg.innerHTML = "la ville doit contenir entre 2 et 25 caractères" 
         valueCity = null
     }
     if (e.target.value.match(/^[a-z A-Z]{2,25}$/)) {
@@ -357,6 +366,8 @@ email.addEventListener("input", function (e) {
     }
 });
 
+////// création et envoi des données lors de la validation du formulaire //////
+
 function makeRequestObject() {
     const form = document.querySelector(".cart__order__form")
     const firstName = form.elements.firstName.value
@@ -386,15 +397,3 @@ function getIdsForConfirmation(item) {
     }
     return products
 }
-/*
-const searchLocation = window.location.search
-const item = localStorage.getItem("item")*/
-
-
-
-
-
-
-
-
-
